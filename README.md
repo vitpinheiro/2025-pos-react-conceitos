@@ -1,10 +1,10 @@
 # Notas de aula - React - Conceitos básicos
 
-
 ## Informações gerais
 - **Objetivo**: mostrar os conceitos básicos de React
 - **Público alvo**: alunos da disciplina de POS (Programação Orientada a Serviços) do curso de Infoweb (Técnico Integrado em Informática para Internet) no CNAT-IFRN (Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte - Campus Natal-Central)
 - **Professor**: [L A Minora](https://github.com/leonardo-minora/)
+- **Aluno**: FIXME
 
 
 ## Pré-requisitos
@@ -19,7 +19,7 @@
 2. Prática com os conceitos básicos
 
 
-### React - Conceitos básicos
+### 1. React - Conceitos básicos
 by [copilot](https://copilot.microsoft.com/)
 
 #### O que é React?
@@ -53,104 +53,49 @@ React facilita a manipulação de eventos como cliques, mudanças de formulário
 
 
 
-### Prática com os conceitos básicos
+### 2. Prática com os conceitos básicos
 
 **Passos para praticar**
-1. Fork desse repositório para permitir a prática
-2. Modificar a linha 8, adicionando nome do aluno e link para o github do aluno.
+1. _Fork_ desse repositório para permitir a prática
+2. Modificar a linha 7, colocando o nome do aluno e o link para o github também do aluno.
 3. Baixar (`git clone`) para máquina local (lembrar de abrir o vscode na mesma pasta do projeto clonado) ou usar o _codespaces_ para "codar"
-4. Rodar a aplicação com `npm run dev`
-5. Abrir o navegador e visualizar a aplicação enquanto modifica
+4. Lembrar de instalar as bibliotecas com `npm i`
+5. Rodar a aplicação com `npm run dev`
+6. Abrir o navegador e visualizar a aplicação enquanto modifica
 
 **Práticas**
-1. Instalar bibliotecas executando o comando `npm i`
-2. Escrevendo Markup com JSX
-3. Criar e aninhar componentes react
-4. Adicionando Estilos
-5. 
+1. Escrevendo Markup com JSX
+2. Criar e aninhar componentes react
+3. Adicionando Estilos
+4. 
 
+**Observação** as práticas serão modificando os arquivos `src/app/page.tsx` e `src/app/globals.css`.
 
-
-### 2. Escrevendo Markup com JSX
-JSX permite escrever HTML dentro do JavaScript. Aqui está um exemplo simples:
-
-```jsx
-const Elemento = <h1>Olá, mundo!</h1>;
-
-```
-
-
-
-#### 3. Criar e aninhar componentes
-Para criar componentes em Next.js, você pode usar funções ou classes. Abaixo está um exemplo de como criar e aninhar componentes.
-
-Lembrando que o arquivo abaixo é `src/app/page.tsx`.
-
-```jsx
-"use client";
-
-function Titulo(props) {
-  return <h1>React - conceitos básicos</h1>;
-}
-
-const Saudacao = ({ nome }) => {
-  return <h2>Olá, {nome}!</h2>;
-}
-
-const Home = () => {
-  return (
-    <div>
-			<main>
-				<Titulo />
-        <Saudacao nome="Professor" />
-        <Saudacao nome="Alunos" />
-			</main>
-    </div>
-  );
-}
-
-```
-
-Como estamos usando _typescript_, e se o _eslint_ estiver ativo no _vscode_, deverá reclamar de tipagem com a variável `nome`.
-Abaixo segue a "correção" declarando o tipo e especificando nos componentes o tipo.
+### Prática 1. Escrevendo Markup com JSX
+JSX é a sintaxe baseada na linguagem de marcação HTML para descrever um componente, ou parte dele, em React.
+JSX é mais rigoroso que os navegadores são com arquivos HTML, como abrir e fechar marcações na sequência correta, uso de propriedades, entre outras coisas.
+O JSX para descrever um componente deve:
+- ter somente 1 marcação pai, que pode conter vários filhos, netos, etc.
+- quando for usar mais de 1 linha, sempre envolver a marcação pai com parenteses.
+- caso não tenha uma marcação pai de fato, pode usar a marcação vazia `<> ... </>`.
 
 ```jsx
 // src/app/page.tsx
 "use client";
 
-import React, { Component } from 'react';
+const Titulo = () => <h1>React - Conceitos básicos</h1>;
 
+const SubTitulo = () => (<h2>Lista de tarefas</h2>);
 
-interface SaudacaoProps {
-    nome: string;
-  }
-  
-function Titulo(props) {
-  return <h1>React - conceitos básicos</h1>;
-}
-
-const Saudacao: React.FC<SaudacaoProps> = ({nome}) => {
-  return <h2>Olá, {nome}!</h2>;
-}
-
-class SaudacaoComClass extends React.Component<SaudacaoProps> {
-  render() {
-    const { nome } = this.props;
-    return <h2>Olá, {nome}!</h2>;
-  }
-}
+const Cabecalho = () => (
+  <>
+    <Titulo />
+    <SubTitulo />
+  </>
+);
 
 const Home = () => {
-	return (
-		<div>
-			<main>
-				<Titulo />
-        <Saudacao nome="Minora" />
-        <Saudacao nome="Alunos" />
-        <SaudacaoComClass nome="professor e alunos" />
-			</main>
-		</div>
-	);
+  return <Cabecalho />;
 }
 
 export default Home;
@@ -158,13 +103,94 @@ export default Home;
 ```
 
 
+
+#### 2. Criar e aninhar componentes
+Para criar componentes em React, você pode usar funções ou classes.
+Abaixo está um exemplo de como criar e aninhar componentes.
+
+Lembrando que o arquivo abaixo é `src/app/page.tsx`.
+
+```jsx
+// src/app/page.tsx
+"use client";
+
+import React from "react";
+
+const Titulo = () => <h1>React - Conceitos básicos</h1>;
+
+const SubTitulo = () => <h2>Lista de tarefas</h2>;
+
+function Cabecalho() {
+	return (
+		<>
+			<Titulo />
+			<SubTitulo />
+		</>
+	);
+}
+
+class Tarefa extends React.Component {
+	render(): React.ReactNode {
+		return (
+			<div>
+				<h3>Codar e codar durante 2025</h3>
+				<p>Pendente</p>
+			</div>
+		);
+	}
+}
+const Home = () => {
+	return (
+		<>
+			<Cabecalho />
+			<Tarefa />
+		</>
+	);
+};
+
+export default Home;
+
+```
+
+
+
 ### 4. Adicionando Estilos
-Você pode adicionar estilos usando CSS modules ou styled-jsx. Aqui está um exemplo com CSS modules:
+Você pode adicionar estilos usando CSS modules ou styled-jsx, ou ainda usando Styled Components.
+Abaixo está um exemplo com CSS adicionado classe `titulo` ao código padrão (linhas 1-26) dos projetos React com NextJS.
+
+Lembrando que iremos usar o `tailwind` em sala de aula e como tal o exemplo do código React será usando o framework.
 
 ```css
 /* src/app/globals.css */
+@import "tailwindcss";
+
+:root {
+	--background: #ffffff;
+	--foreground: #171717;
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
+}
+
+body {
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
 .titulo {
-  color: blue;
+	color: blue;
 }
 
 ```
@@ -173,36 +199,104 @@ Você pode adicionar estilos usando CSS modules ou styled-jsx. Aqui está um exe
 // src/app/page.tsx
 "use client";
 
-const Home = () => {
-  return <h1 className="titulo">Olá, mundo!</h1>;
+import React from "react";
+
+const Titulo = () => <h1 className="text-2xl font-bold mb-1">React - Conceitos básicos</h1>;
+
+const SubTitulo = () => <h2 className="text-4xl font-bold mb-6">Lista de tarefas</h2>;
+
+function Cabecalho() {
+	return (
+		<div className="text-center">
+			<Titulo />
+			<SubTitulo />
+		</div>
+	);
 }
+
+class Tarefa extends React.Component {
+	render(): React.ReactNode {
+		return (
+			<div className="p-3 mb-3 rounded-lg shadow-md bg-gray-400">
+				<h3 className="text-xl font-bold">Codar e codar durante 2025</h3>
+				<p className="text-sm">Pendente</p>
+			</div>
+		);
+	}
+}
+
+const Home = () => {
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefa />
+		</div>
+	);
+};
 
 export default Home;
 
 ```
 
 ### 4. Exibindo Dados
-Para exibir dados, você pode usar props e estado. Aqui está um exemplo:
+Para exibir dados, você pode usar `props` e estado.
+Abaixo está um exemplo usando valores em `props`.
 
 ```jsx
 // src/app/page.tsx
 "use client";
 
-const Home = () => {
-  const dados = ["React", "Next.js", "JavaScript"];
+import React from "react";
 
-  return (
-    <ul>
-      {dados.map((item, index) => (
-        <li key={index}>{item}</li>
-      ))}
-    </ul>
-  );
+const Titulo = () => (
+	<h1 className="text-2xl font-bold mb-1">React - Conceitos básicos</h1>
+);
+
+const SubTitulo = () => (
+	<h2 className="text-4xl font-bold mb-6">Lista de tarefas</h2>
+);
+
+function Cabecalho() {
+	return (
+		<div className="text-center">
+			<Titulo />
+			<SubTitulo />
+		</div>
+	);
 }
+
+class Tarefa extends React.Component {
+	render(): React.ReactNode {
+		return (
+			<div className="p-3 mb-3 rounded-lg shadow-md bg-gray-400">
+				<h3 className="text-xl font-bold">{this.props.titulo}</h3>
+				<p className="text-sm">Pendente</p>
+			</div>
+		);
+	}
+}
+
+const Home = () => {
+	const tarefas = [
+		{ id: 1, title: "delectus aut autem", completed: false },
+		{ id: 2, title: "quis ut nam facilis et officia qui", completed: true },
+		{ id: 3, title: "fugiat veniam minus", completed: false },
+	];
+
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefa titulo={tarefas[0].title} />
+			<Tarefa titulo={tarefas[1].title} />
+		</div>
+	);
+};
 
 export default Home;
 
 ```
+
+Talvez apareça um sublinhado vermelho nos códigos `<Tarefa titulo=... />` porque o editor de código não consegue inferir o tipo, sim _typescript_ é tipado.
 
 ### 5. Renderização Condicional
 Você pode renderizar componentes condicionalmente usando operadores ternários ou condicionais simples:
