@@ -503,16 +503,133 @@ export default Home;
 
 #### Prática 6. Respondendo a Eventos
 Para responder a eventos, você pode usar manipuladores de eventos que são bem parecidos como o utilizado no HTML.
-Contudo, atenção com as propriedades.
+Contudo, atenção com os nomes nas marcações, elas seguem a sintaxe _camelCase_.
+
+Algumas coisas, podemos conseguir apenas com o css e auxiliado com o tailwindcss, como o uso do `hover` na parte do código abaixo.
 
 ```jsx
 // src/app/page.tsx
+...
+
+class Tarefa extends React.Component<TarefaProps> {
+	
+	render(): React.ReactNode {
+		const classe = `p-3 mb-3 rounded-lg shadow-md hover:cursor-pointer hover:border ${this.props.concluido ? "bg-gray-800 hover:border-gray-800" : "bg-gray-400 hover:border-gray-400"}`;
+
+		return (
+			<div className={classe}>
+				<h3 className="text-xl font-bold">{this.props.titulo}</h3>
+				<p className="text-sm">{this.props.concluido ? "Concluída" : "Pendente"}</p>
+			</div>
+		);
+	}
+}
+
+...
+
+```
+
+Vamos transformar o componente `Home` de classe para _arrow function_ e seguir tratando eventos.
+
+```jsx
+// src/app/page.tsx
+...
+const Tarefa: React.FC<TarefaProps> = ({titulo, concluido}) => {
+	const classe = `p-3 mb-3 rounded-lg shadow-md hover:cursor-pointer hover:border ${
+		concluido
+			? "bg-gray-800 hover:border-gray-800"
+			: "bg-gray-400 hover:border-gray-400"
+	}`;
+
+	return (
+		<div className={classe}>
+			<h3 className="text-xl font-bold">{titulo}</h3>
+			<p className="text-sm">
+				{concluido ? "Concluída" : "Pendente"}
+			</p>
+		</div>
+	);
+};
+...
+```
+
+Agora, iremos tratar o evento de clicar no `div` da tarefa no código abaixo.
+O código apenas mostra como tratar o evento, definindo uma _arrow function_ anônima que executa uma chamada ao log do console do navegador.
+
+```jsx
+// src/app/page.tsx
+"use client";
+
+import React from "react";
+
+const Titulo = () => (
+	<h1 className="text-2xl font-bold mb-1">React - Conceitos básicos</h1>
+);
+
+const SubTitulo = () => (
+	<h2 className="text-4xl font-bold mb-6">Lista de tarefas</h2>
+);
+
+function Cabecalho() {
+	return (
+		<div className="text-center">
+			<Titulo />
+			<SubTitulo />
+		</div>
+	);
+}
+
+interface TarefaProps {
+	titulo: string;
+	concluido?: boolean;
+}
+
+const Tarefa: React.FC<TarefaProps> = ({ titulo, concluido }) => {
+	const classe = `p-3 mb-3 rounded-lg shadow-md hover:cursor-pointer hover:border ${
+		concluido
+			? "bg-gray-800 hover:border-gray-800"
+			: "bg-gray-400 hover:border-gray-400"
+	}`;
+
+	return (
+		<div
+			className={classe}
+			onClick={() => console.log(`A tarefa '${titulo}' foi clicada!`)}
+		>
+			<h3 className="text-xl font-bold">{titulo}</h3>
+			<p className="text-sm">{concluido ? "Concluída" : "Pendente"}</p>
+		</div>
+	);
+};
+
+const Home = () => {
+	const tarefas = [
+		{ id: 1, title: "delectus aut autem", completed: false },
+		{ id: 2, title: "quis ut nam facilis et officia qui", completed: true },
+		{ id: 3, title: "fugiat veniam minus", completed: false },
+	];
+
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefa titulo={tarefas[0].title} concluido={tarefas[0].completed} />
+			<Tarefa titulo={tarefas[1].title} concluido={tarefas[1].completed} />
+		</div>
+	);
+};
+
+export default Home;
 
 ```
 
 
 
+
 ### 6. Renderizando Listas
+
+
+
+
 Para renderizar listas, você pode usar o método `map`:
 
 ```jsx
