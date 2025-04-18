@@ -67,11 +67,12 @@ React facilita a manipulação de eventos como cliques, mudanças de formulário
 1. Escrevendo Markup com JSX
 2. Criar e aninhar componentes react
 3. Adicionando Estilos
-4. 
+4. Exibindo Dados
+5. 
 
 **Observação** as práticas serão modificando os arquivos `src/app/page.tsx` e `src/app/globals.css`.
 
-### Prática 1. Escrevendo Markup com JSX
+#### Prática 1. Escrevendo Markup com JSX
 JSX é a sintaxe baseada na linguagem de marcação HTML para descrever um componente, ou parte dele, em React.
 JSX é mais rigoroso que os navegadores são com arquivos HTML, como abrir e fechar marcações na sequência correta, uso de propriedades, entre outras coisas.
 O JSX para descrever um componente deve:
@@ -104,7 +105,7 @@ export default Home;
 
 
 
-#### 2. Criar e aninhar componentes
+#### Prática 2. Criar e aninhar componentes
 Para criar componentes em React, você pode usar funções ou classes.
 Abaixo está um exemplo de como criar e aninhar componentes.
 
@@ -154,7 +155,7 @@ export default Home;
 
 
 
-### 4. Adicionando Estilos
+#### Prática 3. Adicionando Estilos
 Você pode adicionar estilos usando CSS modules ou styled-jsx, ou ainda usando Styled Components.
 Abaixo está um exemplo com CSS adicionado classe `titulo` ao código padrão (linhas 1-26) dos projetos React com NextJS.
 
@@ -238,7 +239,9 @@ export default Home;
 
 ```
 
-### 4. Exibindo Dados
+
+
+#### Prática 4. Exibindo Dados
 Para exibir dados, você pode usar `props` e estado.
 Abaixo está um exemplo usando valores em `props`.
 
@@ -297,27 +300,217 @@ export default Home;
 ```
 
 Talvez apareça um sublinhado vermelho nos códigos `<Tarefa titulo=... />` porque o editor de código não consegue inferir o tipo, sim _typescript_ é tipado.
-
-### 5. Renderização Condicional
-Você pode renderizar componentes condicionalmente usando operadores ternários ou condicionais simples:
+Para isso, é tipar o componente React que além de tudo irá permitir verificar se o código JSX esta correto.
+Abaixo segue um exemplo de código, definindo um tipo `TarefaProps` com 2 propriedades `titulo` e `concluido`.
+Sendo este último opcional.
 
 ```jsx
 // src/app/page.tsx
 "use client";
 
-const Home = () => {
-  const estaLogado = true;
+import React from "react";
 
-  return (
-    <div>
-      {estaLogado ? <h1>Bem-vindo de volta!</h1> : <h1>Por favor, faça login.</h1>}
-    </div>
-  );
+const Titulo = () => (
+	<h1 className="text-2xl font-bold mb-1">React - Conceitos básicos</h1>
+);
+
+const SubTitulo = () => (
+	<h2 className="text-4xl font-bold mb-6">Lista de tarefas</h2>
+);
+
+function Cabecalho() {
+	return (
+		<div className="text-center">
+			<Titulo />
+			<SubTitulo />
+		</div>
+	);
 }
+
+interface TarefaProps {
+  titulo: string;
+	concluido?: boolean;
+}
+
+class Tarefa extends React.Component<TarefaProps> {
+	render(): React.ReactNode {
+		return (
+			<div className="p-3 mb-3 rounded-lg shadow-md bg-gray-400">
+				<h3 className="text-xl font-bold">{this.props.titulo}</h3>
+				<p className="text-sm">Pendente</p>
+			</div>
+		);
+	}
+}
+
+const Home = () => {
+	const tarefas = [
+		{ id: 1, title: "delectus aut autem", completed: false },
+		{ id: 2, title: "quis ut nam facilis et officia qui", completed: true },
+		{ id: 3, title: "fugiat veniam minus", completed: false },
+	];
+
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefa titulo={tarefas[0].title} />
+			<Tarefa titulo={tarefas[1].title} />
+		</div>
+	);
+};
 
 export default Home;
 
 ```
+
+
+
+
+#### Prática 5. Renderização Condicional
+Você pode renderizar componentes condicionalmente usando operadores ternários ou condicionais simples.
+Abaixo segue um exemplo com operator ternário.
+
+```jsx
+// src/app/page.tsx
+
+"use client";
+
+import React from "react";
+
+const Titulo = () => (
+	<h1 className="text-2xl font-bold mb-1">React - Conceitos básicos</h1>
+);
+
+const SubTitulo = () => (
+	<h2 className="text-4xl font-bold mb-6">Lista de tarefas</h2>
+);
+
+function Cabecalho() {
+	return (
+		<div className="text-center">
+			<Titulo />
+			<SubTitulo />
+		</div>
+	);
+}
+
+interface TarefaProps {
+  titulo: string;
+	concluido?: boolean;
+}
+
+class Tarefa extends React.Component<TarefaProps> {
+	
+	render(): React.ReactNode {
+		const classe = `p-3 mb-3 rounded-lg shadow-md ${this.props.concluido ? "bg-gray-800" : "bg-gray-400"}`;
+
+		return (
+			<div className={classe}>
+				<h3 className="text-xl font-bold">{this.props.titulo}</h3>
+				<p className="text-sm">{this.props.concluido ? "Concluída" : "Pendente"}</p>
+			</div>
+		);
+	}
+}
+
+const Home = () => {
+	const tarefas = [
+		{ id: 1, title: "delectus aut autem", completed: false },
+		{ id: 2, title: "quis ut nam facilis et officia qui", completed: true },
+		{ id: 3, title: "fugiat veniam minus", completed: false },
+	];
+
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefa titulo={tarefas[0].title} />
+			<Tarefa titulo={tarefas[1].title} />
+		</div>
+	);
+};
+
+export default Home;
+
+```
+
+Esta incompleto porque o JSX de `Home` esta faltando passar o valor que informa se a tarefa esta completa ou não.
+Ajustando esse detalhe com o código abaixo.
+
+```jsx
+// src/app/page.tsx
+"use client";
+
+import React from "react";
+
+const Titulo = () => (
+	<h1 className="text-2xl font-bold mb-1">React - Conceitos básicos</h1>
+);
+
+const SubTitulo = () => (
+	<h2 className="text-4xl font-bold mb-6">Lista de tarefas</h2>
+);
+
+function Cabecalho() {
+	return (
+		<div className="text-center">
+			<Titulo />
+			<SubTitulo />
+		</div>
+	);
+}
+
+interface TarefaProps {
+  titulo: string;
+	concluido?: boolean;
+}
+
+class Tarefa extends React.Component<TarefaProps> {
+	
+	render(): React.ReactNode {
+		const classe = `p-3 mb-3 rounded-lg shadow-md ${this.props.concluido ? "bg-gray-800" : "bg-gray-400"}`;
+
+		return (
+			<div className={classe}>
+				<h3 className="text-xl font-bold">{this.props.titulo}</h3>
+				<p className="text-sm">{this.props.concluido ? "Concluída" : "Pendente"}</p>
+			</div>
+		);
+	}
+}
+
+const Home = () => {
+	const tarefas = [
+		{ id: 1, title: "delectus aut autem", completed: false },
+		{ id: 2, title: "quis ut nam facilis et officia qui", completed: true },
+		{ id: 3, title: "fugiat veniam minus", completed: false },
+	];
+
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefa titulo={tarefas[0].title} concluido={tarefas[0].completed} />
+			<Tarefa titulo={tarefas[1].title} concluido={tarefas[1].completed} />
+		</div>
+	);
+};
+
+export default Home;
+
+```
+
+
+
+
+#### Prática 6. Respondendo a Eventos
+Para responder a eventos, você pode usar manipuladores de eventos que são bem parecidos como o utilizado no HTML.
+Contudo, atenção com as propriedades.
+
+```jsx
+// src/app/page.tsx
+
+```
+
+
 
 ### 6. Renderizando Listas
 Para renderizar listas, você pode usar o método `map`:
@@ -342,29 +535,6 @@ export default Home;
 
 ```
 
-### 7. Respondendo a Eventos
-Para responder a eventos, você pode usar manipuladores de eventos:
-
-```jsx
-// src/app/page.tsx
-"use client";
-
-import { useState } from 'react';
-
-const Home = () => {
-  const [contagem, setContagem] = useState(0);
-
-  return (
-    <div>
-      <p>Você clicou {contagem} vezes</p>
-      <button onClick={() => setContagem(contagem + 1)}>Clique aqui</button>
-    </div>
-  );
-}
-
-export default Home;
-
-```
 
 ### 8. Atualizando a Tela
 Para atualizar a tela, você pode usar o estado e hooks como `useEffect`:
