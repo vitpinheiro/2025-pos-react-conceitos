@@ -625,32 +625,101 @@ export default Home;
 
 
 
-### 6. Renderizando Listas
+#### Prática 6. Renderizando Listas
 
+Considerando o código de `Home` abaixo, temos algumas considerações: 
+1. se for uma lista de tarefas muito grande, o código JSX de `Home` também ficará grande;
+2. se a lista mudar de tamanho, precisaremos modificar o código de `Home`;
+3. se a lista vier dinâmicamenteo, não tem como atualizar o código em tempo de execução.
 
-
-
-Para renderizar listas, você pode usar o método `map`:
 
 ```jsx
 // src/app/page.tsx
-"use client";
+...
 
 const Home = () => {
-  const itens = ["Item 1", "Item 2", "Item 3"];
+	const tarefas = [
+		{ id: 1, title: "delectus aut autem", completed: false },
+		{ id: 2, title: "quis ut nam facilis et officia qui", completed: true },
+		{ id: 3, title: "fugiat veniam minus", completed: false },
+	];
 
-  return (
-    <ul>
-      {itens.map((item, index) => (
-        <li key={index}>{item}</li>
-      ))}
-    </ul>
-  );
-}
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefa titulo={tarefas[0].title} concluido={tarefas[0].completed} />
+			<Tarefa titulo={tarefas[1].title} concluido={tarefas[1].completed} />
+			<Tarefa titulo={tarefas[2].title} concluido={tarefas[2].completed} />
+		</div>
+	);
+};
 
 export default Home;
 
 ```
+
+
+Resolvendo os itens 1 e 2 construindo com construções de repetição que pode ser laços (`for` e `while`) ou métodos de coleções (`map`, `filter`).
+No caso de componentes React, usualmente a comunidade prefere usar uma lista com método:
+- `map` se for converter um objeto em um componente Reaact
+- `filter` se for pegar um subconjunto da lista de objetos.
+
+Ainda falanda de hábito da comunidade, normalmente usa um componente React para o conjunto e um outro para o item.
+Neste caso, o código abaixo será utilizado `Tarefas` para o conjunto e `Tarefa` para o item.
+
+Por fim, o React 'obriga' (para não dizer que apenas reclama com _error_ no console do navegador) a usar em uma lista a propriedade `key`.
+O código abaixo mostra parte do arquivo `src/app/page.tsx` que mudou para apresentar a lista.
+
+```jsx
+// src/app/page.tsx 
+...
+
+interface TarefaInterface {
+	id: number;
+	title: string;
+	completed: boolean;
+}
+
+interface TareafasProps {
+	dados: Array<TarefaInterface>;
+}
+
+const Tarefas: React.FC<TareafasProps> = ({ dados }) => {
+	return (
+		<div>
+			{dados.map((tarefa) => (
+				<Tarefa
+					key={tarefa.id}
+					titulo={tarefa.title}
+					concluido={tarefa.completed}
+				/>
+			))}
+		</div>
+	);
+};
+
+const Home = () => {
+	const tarefas = [
+		{ id: 1, title: "delectus aut autem", completed: false },
+		{ id: 2, title: "quis ut nam facilis et officia qui", completed: true },
+		{ id: 3, title: "fugiat veniam minus", completed: false },
+	];
+
+	return (
+		<div className="container mx-auto p-4">
+			<Cabecalho />
+			<Tarefas dados={tarefas} />
+		</div>
+	);
+};
+
+export default Home;
+
+```
+
+O código completo pode ser acessado no [gist](https://gist.github.com/leonardo-minora/02a77601892e9ff160511dab184d4953).
+
+
 
 
 ### 8. Atualizando a Tela
@@ -659,28 +728,6 @@ Para atualizar a tela, você pode usar o estado e hooks como `useEffect`:
 ```jsx
 // src/app/page.tsx
 "use client";
-
-import { useState, useEffect } from 'react';
-
-const Home = () => {
-  const [dados, setDados] = useState([]);
-
-  useEffect(() => {
-    fetch('/api/dados')
-      .then(response => response.json())
-      .then(data => setDados(data));
-  }, []);
-
-  return (
-    <ul>
-      {dados.map((item, index) => (
-        <li key={index}>{item}</li>
-      ))}
-    </ul>
-  );
-}
-
-export default Home;
 
 ```
 
@@ -691,27 +738,5 @@ Para compartilhar dados entre componentes, você pode usar props ou contextos:
 // src/app/page.tsx
 "use client";
 
-import { useState } from 'react';
-
-function Contador() {
-  const [contagem, setContagem] = useState(0);
-
-  return (
-    <div>
-      <p>Você clicou {contagem} vezes</p>
-      <button onClick={() => setContagem(contagem + 1)}>Clique aqui</button>
-    </div>
-  );
-}
-
-const Home = () => {
-  return (
-    <div>
-      <Contador />
-    </div>
-  );
-}
-
-export default Home;
 
 ```
