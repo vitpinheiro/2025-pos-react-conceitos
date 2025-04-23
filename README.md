@@ -68,7 +68,10 @@ React facilita a manipulação de eventos como cliques, mudanças de formulário
 2. Criar e aninhar componentes react
 3. Adicionando Estilos
 4. Exibindo Dados
-5. 
+5. Renderização Condicional
+6. Respondendo a Eventos
+7. Renderizando Listas
+8. Atualizando a Tela - Use _state_
 
 **Observação** as práticas serão modificando os arquivos `src/app/page.tsx` e `src/app/globals.css`.
 
@@ -625,7 +628,7 @@ export default Home;
 
 
 
-#### Prática 6. Renderizando Listas
+#### Prática 7. Renderizando Listas
 
 Considerando o código de `Home` abaixo, temos algumas considerações: 
 1. se for uma lista de tarefas muito grande, o código JSX de `Home` também ficará grande;
@@ -722,17 +725,46 @@ O código completo pode ser acessado no [gist](https://gist.github.com/leonardo-
 
 
 
-### 8. Atualizando a Tela
-Para atualizar a tela, você pode usar o estado e hooks como `useEffect`:
+#### Prática 8. Atualizando a Tela - Use _state_
+Para atualizar a tela, você pode usar o estado e hooks como `useEffect`.
+No exemplo abaixo, foi usado o hook `useState` para definir estado (variável e função para modificar valor da variável) no componente `Tarefa`.
+Este código é a parte que modificou da tarefa anterior e foi recortado para efeito de explicação.
+
+Para o código completo, acessar o [gist](https://gist.github.com/leonardo-minora/89f427ec5500c2d0ba585c90760fc89f).
 
 ```jsx
 // src/app/page.tsx
-"use client";
+...
+const Tarefa: React.FC<TarefaProps> = ({ titulo, concluido }) => {
+	const [estaConcluido, setEstaConcluido] = useState(concluido);
+
+	const classe = `p-3 mb-3 rounded-lg shadow-md hover:cursor-pointer hover:border ${
+		estaConcluido
+			? "bg-gray-800 hover:border-gray-800"
+			: "bg-gray-400 hover:border-gray-400"
+	}`;
+
+	const escutarClique = () => {
+		console.log(`A tarefa '${titulo}' foi clicada!`);
+		setEstaConcluido(!estaConcluido);
+	}
+
+	return (
+		<div
+			className={classe}
+			onClick={() => escutarClique()}
+		>
+			<h3 className="text-xl font-bold">{titulo}</h3>
+			<p className="text-sm">{estaConcluido ? "Concluída" : "Pendente"}</p>
+		</div>
+	);
+};
+...
 
 ```
 
 ### 9. Compartilhando Dados Entre Componentes
-Para compartilhar dados entre componentes, você pode usar props ou contextos:
+Para compartilhar dados entre componentes, você pode usar props ou contextos.
 
 ```jsx
 // src/app/page.tsx
