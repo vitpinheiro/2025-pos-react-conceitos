@@ -71,7 +71,7 @@ React facilita a manipulação de eventos como cliques, mudanças de formulário
 5. Renderização Condicional
 6. Respondendo a Eventos
 7. Renderizando Listas
-8. Atualizando a Tela - Use _state_
+8. Atualizando a Tela - _useState_
 
 **Observação** as práticas serão modificando os arquivos `src/app/page.tsx` e `src/app/globals.css`.
 
@@ -725,7 +725,7 @@ O código completo pode ser acessado no [gist](https://gist.github.com/leonardo-
 
 
 
-#### Prática 8. Atualizando a Tela - Use _state_
+#### Prática 8. Atualizando a Tela - _useState_
 Para atualizar a tela, você pode usar o estado e hooks como `useEffect`.
 No exemplo abaixo, foi usado o hook `useState` para definir estado (variável e função para modificar valor da variável) no componente `Tarefa`.
 Este código é a parte que modificou da tarefa anterior e foi recortado para efeito de explicação.
@@ -760,15 +760,5 @@ const Tarefa: React.FC<TarefaProps> = ({ titulo, concluido }) => {
 	);
 };
 ...
-
-```
-
-### 9. Compartilhando Dados Entre Componentes
-Para compartilhar dados entre componentes, você pode usar props ou contextos.
-
-```jsx
-// src/app/page.tsx
-"use client";
-
 
 ```
